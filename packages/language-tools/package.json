@@ -1,0 +1,48 @@
+{
+  "name": "root",
+  "version": "0.0.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/withcivet/language-tools.git"
+  },
+  "scripts": {
+    "release": "pnpm build && changeset publish",
+    "version": "changeset version && pnpm install --no-frozen-lockfile && pnpm run format",
+    "build": "turbo run build --filter=\"@civetjs/**\" --filter=\"civet-vscode\" --concurrency=1",
+    "dev": "turbo run dev --filter=\"prettier-plugin-civet\" --filter=\"@civetjs/**\" --filter=\"@astrojs/**\"  --filter=\"civet-vscode\" --parallel --no-cache",
+    "test": "turbo run test --filter=\"@civetjs/**\" --filter=civet-vscode",
+    "test:skip-vs": "turbo run test --filter=\"@civetjs/language-server\" --filter=\"@civetjs/check\"",
+    "format:ci": "pnpm run format",
+    "format": "biome check --apply ./ && prettier -w \"**/*\" --ignore-unknown --cache",
+    "lint": "eslint . --ext .js,.ts,.mjs,.cjs"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.6.0",
+    "@changesets/cli": "^2.26.1",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.5",
+    "turbo": "1.10.2",
+    "typescript": "^5.2.2"
+  },
+  "engines": {
+    "node": ">=16.12.0",
+    "pnpm": ">=8.2.0"
+  },
+  "packageManager": "pnpm@8.6.2",
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "vue",
+        "vite",
+        "svelte",
+        "@babel/core"
+      ]
+    }
+  },
+  "dependencies": {
+    "astro": "^4.3.5"
+  }
+}

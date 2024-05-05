@@ -1,0 +1,14 @@
+{
+  "name": "civet-lsp",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@astrojs/compiler": "^2.8.0"
+  }
+}

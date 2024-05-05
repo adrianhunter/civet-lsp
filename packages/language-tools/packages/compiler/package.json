@@ -1,0 +1,54 @@
+{
+  "name": "@civetjs/compiler",
+  "version": "0.0.1",
+  "author": "withcivet",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/withcivet/language-tools",
+    "directory": "packages/civet-check"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./sync": {
+      "types": "./dist/sync.d.ts",
+      "import": "./dist/sync.js",
+      "require": "./dist/sync.js",
+      "default": "./dist/sync.js"
+    },
+    "./utils": {
+      "types": "./dist/index.d.ts",
+
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./types": "./types.d.ts",
+    "./package.json": "./package.json"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@astrojs/compiler": "^2.7.0",
+    "@danielx/civet": "^0.7.6"
+  },
+  "devDependencies": {
+    "@types/node": "^18.17.8",
+    "tsx": "^3.12.7"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

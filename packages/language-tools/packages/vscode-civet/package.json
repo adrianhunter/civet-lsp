@@ -1,0 +1,225 @@
+{
+  "name": "civet-vscode",
+  "displayName": "Civet",
+  "description": "Language support for Civet",
+  "categories": ["Programming Languages", "Formatters", "Linters"],
+  "qna": false,
+  "keywords": [
+    "civet",
+    "node",
+    "typescript",
+    "javascript",
+    "react",
+    "vue",
+    "svelte",
+    "Static site generator"
+  ],
+  "icon": "assets/icon.png",
+  "type": "commonjs",
+  "galleryBanner": {
+    "color": "#17191E",
+    "theme": "dark"
+  },
+  "version": "2.8.6",
+  "author": "withcivet",
+  "license": "MIT",
+  "publisher": "civet-build",
+  "engines": {
+    "vscode": "^1.82.0"
+  },
+  "activationEvents": ["onLanguage:civet", "workspaceContains:civet.config.*"],
+  "main": "./dist/node/client.js",
+  "files": ["dist/", "languages/", "syntaxes/", "assets/"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/withcivet/language-tools.git",
+    "directory": "packages/vscode"
+  },
+  "contributes": {
+    "snippets": [
+      {
+        "scope": "civet",
+        "path": "./languages/civet.code-snippets"
+      }
+    ],
+    "typescriptServerPlugins": [],
+    "commands": [
+      {
+        "command": "civet.reloadProjects",
+        "title": "Civet: Reload Projects"
+      },
+      {
+        "command": "civet.findFileReferences",
+        "title": "Civet: Find File References"
+      },
+      {
+        "command": "civet.selectTypescriptVersion",
+        "title": "Civet: Select Typescript Version..."
+      },
+      {
+        "command": "civet.openTsConfig",
+        "title": "Civet: Open TypeScript config"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "civet.reloadProjects",
+          "when": "editorLangId == civet"
+        },
+        {
+          "command": "civet.findFileReferences",
+          "when": "editorLangId == civet"
+        },
+        {
+          "command": "civet.selectTypescriptVersion",
+          "when": "editorLangId == civet"
+        },
+        {
+          "command": "civet.openTsConfig",
+          "when": "editorLangId == civet"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "civet.findFileReferences",
+          "when": "editorLangId == civet",
+          "group": "4_search"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "civet.findFileReferences",
+          "when": "resourceLangId == civet && resourceScheme == file"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "civet.findFileReferences",
+          "when": "resourceLangId == civet",
+          "group": "4_search"
+        }
+      ]
+    },
+    "breakpoints": [
+      {
+        "language": "civet"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Civet configuration",
+      "properties": {
+        "civet.language-server.ls-path": {
+          "type": "string",
+          "title": "Language Server: Path",
+          "description": "Path to the language server executable. You won't need this in most cases, set this only when needing a specific version of the language server"
+        },
+        "civet.language-server.runtime": {
+          "scope": "application",
+          "type": "string",
+          "title": "Language Server: Runtime",
+          "description": "Path to the node executable used to execute the language server. You won't need this in most cases"
+        },
+        "civet.trace.server": {
+          "scope": "window",
+          "type": "string",
+          "enum": ["off", "messages", "verbose"],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the language server."
+        }
+      }
+    },
+    "languages": [
+      {
+        "id": "civet",
+        "extensions": [".civet"],
+        "aliases": ["Civet"],
+        "configuration": "./languages/civet-language-configuration.json",
+        "icon": {
+          "light": "./assets/lang-icon-light.svg",
+          "dark": "./assets/lang-icon-dark.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "civet",
+        "scopeName": "source.civet",
+        "path": "./syntaxes/civet.tmLanguage.json",
+        "embeddedLanguages": {
+          "text.html": "html",
+          "text.html.markdown": "markdown",
+          "source.css": "css",
+          "source.css.less": "less",
+          "source.css.scss": "scss",
+          "source.sass": "sass",
+          "source.stylus": "stylus",
+          "source.js": "javascript",
+          "source.ts": "typescript",
+          "source.json": "json",
+          "source.tsx": "typescriptreact",
+          "meta.tag.tsx": "jsx-tags",
+          "meta.tag.without-attributes.tsx": "jsx-tags",
+          "meta.tag.attributes.tsx": "typescriptreact",
+          "meta.embedded.expression.tsx": "typescriptreact"
+        },
+        "unbalancedBracketScopes": [
+          "keyword.operator.relational",
+          "storage.type.function.arrow",
+          "keyword.operator.bitwise.shift",
+          "meta.brace.angle",
+          "punctuation.definition.tag",
+          "keyword.operator.assignment.compound.bitwise.ts"
+        ]
+      },
+      {
+        "scopeName": "text.html.markdown.civet",
+        "path": "./syntaxes/markdown.civet.tmLanguage.json",
+        "injectTo": ["text.html.markdown", "source.civet"],
+        "embeddedLanguages": {
+          "meta.embedded.block.civet": "civet",
+          "meta.embedded.block.civet.frontmatter": "typescriptreact"
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "prebuild": "cd ../ts-plugin && pnpm build",
+    "build": "tsc && pnpm prebuild && node scripts/build.mjs -- --minify",
+    "dev": "node scripts/build.mjs -- --watch",
+    "build:grammar": "node scripts/build-grammar.mjs",
+    "dev:grammar": "node scripts/build-grammar.mjs -- --watch",
+    "test": "pnpm test:vscode && pnpm test:grammar",
+    "test:vscode": "node ./test/runTest.js",
+    "test:grammar": "pnpm build:grammar && node ./test/grammar/test.mjs",
+    "update-grammar-snapshots": "node ./test/grammar/test.mjs --updateSnapshot"
+  },
+  "devDependencies": {
+    "@civetjs/language-server": "^2.8.4",
+    "@astrojs/ts-plugin": "^1.6.1",
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.17.8",
+    "@types/vscode": "^1.82.0",
+    "@volar/language-server": "~2.1.5",
+    "@volar/vscode": "~2.1.5",
+    "@vscode/test-electron": "^2.3.2",
+    "@vscode/vsce": "latest",
+    "esbuild": "^0.17.19",
+    "esbuild-plugin-copy": "^2.1.1",
+    "glob": "^8.0.3",
+    "js-yaml": "^4.1.0",
+    "kleur": "^4.1.5",
+    "mocha": "^10.2.0",
+    "vscode-languageclient": "^9.0.1",
+    "vscode-tmgrammar-test": "^0.1.2"
+  },
+  "dependencies": {
+    "@civetjs/compiler": "^0.0.1",
+    "prettier": "^3.2.5",
+    "prettier-plugin-civet": "0.0.1",
+
+    "prettier-plugin-astro": "^0.13.0"
+  }
+}

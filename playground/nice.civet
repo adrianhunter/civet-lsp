@@ -1,0 +1,9 @@
+---
+const bro = 123;
+---
+
+<script>
+  function test(asd: 12) {
+    console.log("test");
+  }
+</script>

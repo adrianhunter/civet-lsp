@@ -1,0 +1,80 @@
+{
+  "name": "@civetjs/language-server",
+  "version": "2.8.4",
+  "author": "withcivet",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/withcivet/language-tools",
+    "directory": "packages/language-server"
+  },
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "files": [
+    "bin",
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "types/**/*.d.ts"
+  ],
+  "bin": {
+    "civet-ls": "./bin/nodeServer.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "mocha --timeout 10000 --require tsx --require test/takedown.ts test/misc/init.test.ts test/**/*.test.ts",
+    "test:match": "pnpm run test -g"
+  },
+  "dependencies": {
+    "@astrojs/compiler": "^2.7.0",
+    "@astrojs/svelte": "^5.0.3",
+    "@astrojs/vue": "^4.0.8",
+    "@civetjs/compiler": "0.0.1",
+    "@danielx/civet": "^0.7.6",
+    "@jridgewell/sourcemap-codec": "^1.4.15",
+    "@volar/kit": "~2.1.5",
+    "@volar/language-core": "~2.1.5",
+    "@volar/language-server": "~2.1.5",
+    "@volar/language-service": "~2.1.5",
+    "@volar/typescript": "~2.1.5",
+    "fast-glob": "^3.2.12",
+    "volar-service-css": "0.0.34",
+    "volar-service-emmet": "0.0.34",
+    "volar-service-html": "0.0.34",
+    "volar-service-prettier": "0.0.34",
+    "volar-service-typescript": "0.0.34",
+    "volar-service-typescript-twoslash-queries": "0.0.34",
+    "vscode-html-languageservice": "^5.1.2",
+    "vscode-uri": "^3.0.8"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.5",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.17.8",
+    "@volar/test-utils": "~2.1.5",
+    "astro": "^4.3.5",
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "svelte": "^4.2.10",
+    "tsx": "^3.12.7",
+    "typescript": "^5.2.2",
+    "vscode-languageserver-protocol": "^3.17.5",
+    "vscode-languageserver-textdocument": "^1.0.11"
+  },
+  "peerDependencies": {
+    "prettier": "^3.0.0",
+    "prettier-plugin-astro": ">=0.11.0",
+    "prettier-plugin-civet": "0.0.1"
+  },
+  "peerDependenciesMeta": {
+    "prettier": {
+      "optional": true
+    },
+    "prettier-plugin-astro": {
+      "optional": true
+    },
+    "prettier-plugin-civet": {
+      "optional": true
+    }
+  }
+}

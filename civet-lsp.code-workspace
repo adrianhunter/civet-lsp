@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "./packages/language-tools"
+		},
+		{
+			"path": "."
+		},
+	],
+	"settings": {}
+}
