@@ -27,7 +27,7 @@ export function getSnippetCompletions(
         value: [
           "Create a new interface to type your props.",
           "\n",
-          "[Astro reference](https://docs.astro.build/en/guides/typescript/#component-props)",
+          "[Civet reference](https://docs.civet.build/en/guides/typescript/#component-props)",
         ].join("\n"),
       },
       insertTextFormat: 2,
@@ -43,7 +43,7 @@ export function getSnippetCompletions(
         value: [
           "Create a new getStaticPaths function.",
           "\n",
-          "[Astro reference](https://docs.astro.build/en/reference/api-reference/#getstaticpaths)",
+          "[Civet reference](https://docs.civet.build/en/reference/api-reference/#getstaticpaths)",
         ].join("\n"),
       },
       insertText:
@@ -64,9 +64,9 @@ export function getSnippetCompletions(
       documentation: {
         kind: "markdown",
         value: [
-          "Add prerender export. When [using server-side rendering](https://docs.astro.build/en/guides/server-side-rendering/#enabling-ssr-in-your-project), this value will be used to determine whether to prerender the page or not.",
+          "Add prerender export. When [using server-side rendering](https://docs.civet.build/en/guides/server-side-rendering/#enabling-ssr-in-your-project), this value will be used to determine whether to prerender the page or not.",
           "\n",
-          "[Astro reference](https://docs.astro.build/en/guides/server-side-rendering/#configuring-individual-routes)",
+          "[Civet reference](https://docs.civet.build/en/guides/server-side-rendering/#configuring-individual-routes)",
         ].join("\n"),
       },
       insertText: "export const prerender = ${1|true,false,import.meta.env.|}",

@@ -8,9 +8,13 @@ export default defineConfig({
   external: [
     "prettier",
     "prettier/doc",
+    "prettier/plugins/babel",
     "@astrojs/compiler",
     "@astrojs/compiler/utils",
     "@astrojs/compiler/sync",
+    "@civetjs/compiler",
+    "@civetjs/compiler/utils",
+    "@civetjs/compiler/sync",
     "sass-formatter",
     "node:module",
     "node:buffer",

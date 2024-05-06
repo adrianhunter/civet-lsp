@@ -1,0 +1,20 @@
+---
+// { Hello } from "./script"
+
+import { Hello, sayHello } from "./script"
+
+
+export const cool = new Hello()
+
+export nice := cool.name
+
+
+
+
+let dog = comptime ->
+    1 + 2 
+
+
+
+
+---

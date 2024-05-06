@@ -24,12 +24,16 @@ export const create = (ts: typeof import("typescript")): ServicePlugin => {
     create(context): ServicePluginInstance {
       return {
         provideCompletionItems(document, position, completionContext, token) {
+
+          console.log("🚗 --------------------------------------------------------------🚗")
+          console.log("🚗 ~ file: civet.ts:28 ~ provideCompletionItems ~ token:", token)
+          console.log("🚗 --------------------------------------------------------------🚗")
+
           if (token.isCancellationRequested) return null;
           let items: CompletionItem[] = [];
 
           const [file] = context.documents.getVirtualCodeByUri(document.uri);
           if (!(file instanceof CivetVirtualCode)) return;
-
           if (completionContext.triggerCharacter === "-") {
             const frontmatterCompletion = getFrontmatterCompletion(
               file,

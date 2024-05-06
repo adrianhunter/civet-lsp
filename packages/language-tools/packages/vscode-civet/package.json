@@ -2,7 +2,11 @@
   "name": "civet-vscode",
   "displayName": "Civet",
   "description": "Language support for Civet",
-  "categories": ["Programming Languages", "Formatters", "Linters"],
+  "categories": [
+    "Programming Languages",
+    "Formatters",
+    "Linters"
+  ],
   "qna": false,
   "keywords": [
     "civet",
@@ -27,9 +31,17 @@
   "engines": {
     "vscode": "^1.82.0"
   },
-  "activationEvents": ["onLanguage:civet", "workspaceContains:civet.config.*"],
+  "activationEvents": [
+    "onLanguage:civet",
+    "workspaceContains:civet.config.*"
+  ],
   "main": "./dist/node/client.js",
-  "files": ["dist/", "languages/", "syntaxes/", "assets/"],
+  "files": [
+    "dist/",
+    "languages/",
+    "syntaxes/",
+    "assets/"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/withcivet/language-tools.git",
@@ -42,7 +54,12 @@
         "path": "./languages/civet.code-snippets"
       }
     ],
-    "typescriptServerPlugins": [],
+    "typescriptServerPlugins": [
+      {
+        "name": "civet-ts-plugin-bundle",
+        "enableForWorkspaceTypeScriptVersions": true
+      }
+    ],
     "commands": [
       {
         "command": "civet.reloadProjects",
@@ -124,7 +141,11 @@
         "civet.trace.server": {
           "scope": "window",
           "type": "string",
-          "enum": ["off", "messages", "verbose"],
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
           "default": "off",
           "description": "Traces the communication between VS Code and the language server."
         }
@@ -133,14 +154,19 @@
     "languages": [
       {
         "id": "civet",
-        "extensions": [".civet"],
-        "aliases": ["Civet"],
+        "extensions": [
+          ".civet"
+        ],
+        "aliases": [
+          "Civet"
+        ],
         "configuration": "./languages/civet-language-configuration.json",
         "icon": {
           "light": "./assets/lang-icon-light.svg",
           "dark": "./assets/lang-icon-dark.svg"
         }
       }
+     
     ],
     "grammars": [
       {
@@ -176,17 +202,24 @@
       {
         "scopeName": "text.html.markdown.civet",
         "path": "./syntaxes/markdown.civet.tmLanguage.json",
-        "injectTo": ["text.html.markdown", "source.civet"],
+        "injectTo": [
+          "text.html.markdown",
+          "source.civet"
+        ],
         "embeddedLanguages": {
           "meta.embedded.block.civet": "civet",
           "meta.embedded.block.civet.frontmatter": "typescriptreact"
         }
       }
+     
     ]
   },
   "scripts": {
-    "prebuild": "cd ../ts-plugin && pnpm build",
-    "build": "tsc && pnpm prebuild && node scripts/build.mjs -- --minify",
+    "prebuild:astro": "cd ../ts-plugin && pnpm build",
+    "prebuild:civet": "cd ../ts-plugin-civet && pnpm build",
+    "prebxuild": "pnpm run prebuild:astro && prebuild:civet && pnpm build",
+    "pack": "npx @vscode/vsce pack",
+    "build": "tsc && node scripts/build.mjs -- --minify",
     "dev": "node scripts/build.mjs -- --watch",
     "build:grammar": "node scripts/build-grammar.mjs",
     "dev:grammar": "node scripts/build-grammar.mjs -- --watch",
@@ -196,15 +229,12 @@
     "update-grammar-snapshots": "node ./test/grammar/test.mjs --updateSnapshot"
   },
   "devDependencies": {
-    "@civetjs/language-server": "^2.8.4",
-    "@astrojs/ts-plugin": "^1.6.1",
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.17.8",
     "@types/vscode": "^1.82.0",
     "@volar/language-server": "~2.1.5",
     "@volar/vscode": "~2.1.5",
-    "@vscode/test-electron": "^2.3.2",
     "@vscode/vsce": "latest",
     "esbuild": "^0.17.19",
     "esbuild-plugin-copy": "^2.1.1",
@@ -216,10 +246,14 @@
     "vscode-tmgrammar-test": "^0.1.2"
   },
   "dependencies": {
+    "@civetjs/language-server": "0.0.1",
+    "@civetjs/ts-plugin": "0.0.1",
     "@civetjs/compiler": "^0.0.1",
     "prettier": "^3.2.5",
-    "prettier-plugin-civet": "0.0.1",
-
-    "prettier-plugin-astro": "^0.13.0"
+    "prettier-plugin-civet": "0.0.1"
+  },
+  "vsce": {
+    "dependencies": false,
+    "yarn": false
   }
 }

@@ -38,7 +38,7 @@ export function getCivetInstall(
       ].forEach((dep) => deps.add(dep));
     } catch {}
 
-    if (!deps.has("civet")) {
+    if (!deps.has("@danielx/civet")) {
       const directoryContent = checkForCivet.readDirectory(
         path.dirname(checkForCivet.nearestPackageJson),
         [".js", ".mjs", ".cjs", ".ts", ".mts", ".cts"],
@@ -58,7 +58,7 @@ export function getCivetInstall(
   }
 
   try {
-    civetPath = getPackagePath("civet", basePaths);
+    civetPath = getPackagePath("@danielx/civet", basePaths);
 
     if (!civetPath) {
       throw Error;

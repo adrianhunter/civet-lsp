@@ -1,0 +1,15 @@
+{
+  // Purposely empty, this is done so TypeScript knows where the root of the project is and doesn't try to go too high into the monorepo
+  "compilerOptions": {
+    "noUnusedLocals": false,
+    "plugins": [
+      // {
+      //   "name": "@astrojs/ts-plugin"
+      // },
+      // {
+      //   "name": "@civetjs/ts-plugin"
+      // }
+    ],
+    "jsx": "preserve"
+  }
+}

@@ -23,7 +23,6 @@
     },
     "./utils": {
       "types": "./dist/index.d.ts",
-
       "import": "./dist/index.js",
       "require": "./dist/index.js",
       "default": "./dist/index.js"
@@ -31,18 +30,19 @@
     "./types": "./types.d.ts",
     "./package.json": "./package.json"
   },
-  "type": "module",
+  "type": "commonjs",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch"
   },
   "dependencies": {
-    "@astrojs/compiler": "^2.7.0",
-    "@danielx/civet": "^0.7.6"
+    "@danielx/civet": "^0.7.6",
+    "@volar/language-core": "~2.1.5",
+    "source-map": "0.6.1",
+    "vscode-languageserver": "^9.0.1"
   },
   "devDependencies": {
     "@types/node": "^18.17.8",

@@ -55,6 +55,11 @@ export async function activate(
       transport: lsp.TransportKind.ipc,
       options: runOptions,
     },
+
+    options: {
+
+    },
+
     debug: {
       module: serverModule,
       transport: lsp.TransportKind.ipc,
@@ -64,21 +69,45 @@ export async function activate(
 
   const serverRuntime = runtimeConfig.get<string>("runtime");
   if (serverRuntime) {
+    //@ts-ignore
     serverOptions.run.runtime = serverRuntime;
+    //@ts-ignore
     serverOptions.debug.runtime = serverRuntime;
     console.info(`Using ${serverRuntime} as runtime`);
   }
 
   const initializationOptions = {
     typescript: {
+
       tsdk: (await getTsdk(context)).tsdk,
     },
+
     diagnosticModel: DiagnosticModel.Push,
   } satisfies InitOptions;
 
   const clientOptions = {
-    documentSelector: [{ language: "civet" }],
+    documentSelector: [{
+
+      language: "civet"
+    }],
     initializationOptions,
+
+    "middleware": {
+      /**
+       * @description 
+       * this fixes the issue when pressing "." and getting no autocomplete because 
+       * civet produces a compile error
+       */
+      // async didChange(data, next) {
+      //   if (data.contentChanges.length === 1 && data.contentChanges[0].text === '.') {
+      //     return;
+      //   }
+      //   return await next(data)
+      // },
+
+      // 'handleRegisterCapability': {}
+    }
+
   } satisfies lsp.LanguageClientOptions;
   client = new lsp.LanguageClient(
     "civet",

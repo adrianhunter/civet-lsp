@@ -16,6 +16,8 @@ import { CivetMetadata, getCivetMetadata } from "./parseCivet";
 import { extractStylesheets } from "./parseCSS";
 import { parseHTML } from "./parseHTML";
 import { extractScriptTags } from "./parseJS.js";
+import { getLineAndCharacterOfPosition } from "typescript";
+import type { VirtualUpdate } from "@civetjs/compiler";
 
 export function getLanguageModule(
   civetInstall: CivetInstall | undefined,
@@ -129,8 +131,8 @@ export function getLanguageModule(
               allowJs: true, // Needed for inline scripts, which are virtual .js files
               isolatedModules: true,
               moduleResolution: baseCompilationSettings.moduleResolution ===
-                    ts.ModuleResolutionKind.Classic ||
-                  !baseCompilationSettings.moduleResolution
+                ts.ModuleResolutionKind.Classic ||
+                !baseCompilationSettings.moduleResolution
                 ? ts.ModuleResolutionKind.Node10
                 : baseCompilationSettings.moduleResolution,
             };
@@ -140,6 +142,7 @@ export function getLanguageModule(
     },
   };
 }
+
 
 export class CivetVirtualCode implements VirtualCode {
   id = "root";
@@ -151,6 +154,7 @@ export class CivetVirtualCode implements VirtualCode {
   htmlDocument!: HTMLDocument;
   scriptCodeIds!: string[];
   codegenStacks = [];
+  inited = false
 
   constructor(
     public fileName: string,
@@ -165,11 +169,58 @@ export class CivetVirtualCode implements VirtualCode {
   }
 
   public update(newSnapshot: ts.IScriptSnapshot) {
+
+
+
+    console.log("🚗 -----------------------------------------------------------------------------------------🚗")
+    console.log("🚗 -----------------------------------------------------------------------------------------🚗")
+
+    const change = newSnapshot.getChangeRange(this.snapshot)
+
     this.snapshot = newSnapshot;
-    this.onSnapshotUpdated();
+
+    // this.onVirtualUpdate(newSnapshot)
+    // let newInput = ''
+
+    // console.log("++++++++++++++++++++++")
+    // if (changeRange?.newLength === 1) {
+    //   const char = newSnapshot.getText(changeRange.span.start, changeRange.span.start + 1)
+
+    //   console.log("🚗 ----------------------------------------------------------------🚗")
+    //   console.log("🚗 ~ file: index.ts:174 ~ CivetVirtualCode ~ update ~ char:", char)
+    //   console.log("🚗 ----------------------------------------------------------------🚗")
+
+    //   if (char === ".") {
+    //     const safeInput = newSnapshot.getText(0, changeRange.span.start) + newSnapshot.getText(changeRange.span.start + 1, newSnapshot.getLength())
+
+    //     this.snapshot = newSnapshot;
+
+    //     this.onVirtualUpdate({
+
+    //       safeInput,
+    //       char, start: changeRange.span.start
+    //     })
+
+    //     return
+
+    //     // input = changeCharAtIndex(input, change.span.start, " ")
+    //   } else {
+    //     // newInput = newSnapshot.getText(0, newSnapshot.getLength())
+
+    //   }
+    // } else {
+    //   // newInput = newSnapshot.getText(0, newSnapshot.getLength())
+
+
+    // }
+
+    // this.snapshot = newSnapshot;
+
+
+    this.onSnapshotUpdated(change);
   }
 
-  onSnapshotUpdated() {
+  onSnapshotUpdated(change?: ts.TextChangeRange) {
     this.mappings = [
       {
         sourceOffsets: [0],
@@ -187,7 +238,10 @@ export class CivetVirtualCode implements VirtualCode {
     ];
     this.compilerDiagnostics = [];
 
+
+
     const civetMetadata = getCivetMetadata(
+
       this.fileName,
       this.snapshot.getText(0, this.snapshot.getLength()),
     );
@@ -212,17 +266,6 @@ export class CivetVirtualCode implements VirtualCode {
 
     this.scriptCodeIds = scriptTags.map((scriptTag) => scriptTag.id);
 
-    console.log(
-      "🚗 -------------------------------------------------------------------------------------------------------🚗",
-    );
-    console.log(
-      "🚗 ~ file: index.ts:215 ~ CivetVirtualCode ~ onSnapshotUpdated ~ this.scriptCodeIds:",
-      this.scriptCodeIds,
-    );
-    console.log(
-      "🚗 -------------------------------------------------------------------------------------------------------🚗",
-    );
-
     htmlVirtualCode.embeddedCodes = [];
     htmlVirtualCode.embeddedCodes.push(
       ...extractStylesheets(this.snapshot, htmlDocument, civetMetadata.ast),
@@ -234,19 +277,10 @@ export class CivetVirtualCode implements VirtualCode {
 
     const tsx = civet2tsx(
       this.snapshot.getText(0, this.snapshot.getLength()),
+      // this.snapshot.getText(0, this.snapshot.getLength()),
       this.fileName,
       htmlDocument,
-    );
-
-    console.log(
-      "🚗 -------------------------------------------------------------------------🚗",
-    );
-    console.log(
-      "🚗 ~ file: index.ts:230 ~ CivetVirtualCode ~ onSnapshotUpdated ~ tsx:",
-      tsx,
-    );
-    console.log(
-      "🚗 -------------------------------------------------------------------------🚗",
+      change
     );
 
     this.civetMeta = { ...civetMetadata, tsxRanges: tsx.ranges };
@@ -255,3 +289,176 @@ export class CivetVirtualCode implements VirtualCode {
     this.embeddedCodes.push(tsx.virtualCode);
   }
 }
+
+
+
+// onVirtualUpdate(newSnapshot: ts.IScriptSnapshot) {
+
+//   console.log("🚗 ---------------------------------------------------------------------------------🚗")
+//   console.log("🚗 ---------------------------------------------------------------------------------🚗")
+
+//   // this.compilerDiagnostics = [];
+//   const changeRange = newSnapshot.getChangeRange(this.snapshot)
+
+//   let virtualUpdate: VirtualUpdate | undefined
+//   if (!changeRange) {
+//     return
+//   }
+//   // changeRange.span.start
+
+
+//   let safeInput = ''
+
+//   if (changeRange?.newLength === 1 && (newSnapshot.getText(changeRange.span.start, changeRange.span.start + 1) === ".")) {
+//     // const char = newSnapshot.getText(changeRange.span.start, changeRange.span.start + 1)
+//     // if (char === ".") {
+
+//     // }
+//     // safeInput = this.snapshot.getText(0, this.snapshot.getLength())
+//     safeInput = newSnapshot.getText(0, changeRange.span.start) + " " + newSnapshot.getText(changeRange.span.start + 1, newSnapshot.getLength())
+//     virtualUpdate = {
+//       "char": ".",
+//       "start": changeRange.span.start,
+//       // safeInput
+//     }
+
+
+
+//   } else {
+//     // const node = this.htmlDocument.findNodeAt(changeRange.span.start)
+
+//     safeInput = newSnapshot.getText(0, newSnapshot.getLength())
+
+
+
+//   }
+//   this.snapshot = newSnapshot;
+
+//   console.log("🚗 -----------------------------------------------------------------------------------🚗")
+//   console.log("🚗 ~ file: index.ts:252 ~ CivetVirtualCode ~ onVirtualUpdate ~ safeInput:", safeInput)
+//   console.log("🚗 -----------------------------------------------------------------------------------🚗")
+
+
+//   this.mappings = [
+//     {
+//       sourceOffsets: [0],
+//       generatedOffsets: [0],
+//       lengths: [this.snapshot.getLength()],
+//       data: {
+//         verification: true,
+//         completion: true,
+//         semantic: true,
+//         navigation: true,
+//         structure: true,
+//         format: true,
+//       },
+//     },
+//   ];
+//   this.compilerDiagnostics = [];
+
+
+
+//   const civetMetadata = getCivetMetadata(
+
+//     this.fileName,
+//     safeInput
+//   );
+
+//   if (civetMetadata.diagnostics.length > 0) {
+//     this.compilerDiagnostics.push(...civetMetadata.diagnostics);
+//   }
+
+//   const { htmlDocument, virtualCode: htmlVirtualCode } = parseHTML(
+//     this.snapshot,
+//     civetMetadata.frontmatter.status === "closed"
+//       ? civetMetadata.frontmatter.position.end.offset
+//       : 0,
+//   );
+//   this.htmlDocument = htmlDocument;
+
+//   const scriptTags = extractScriptTags(
+//     this.snapshot,
+//     htmlDocument,
+//     civetMetadata.ast,
+//   );
+
+//   this.scriptCodeIds = scriptTags.map((scriptTag) => scriptTag.id);
+
+//   htmlVirtualCode.embeddedCodes = [];
+//   htmlVirtualCode.embeddedCodes.push(
+//     ...extractStylesheets(this.snapshot, htmlDocument, civetMetadata.ast),
+//     ...scriptTags,
+//   );
+
+//   this.embeddedCodes = [];
+//   this.embeddedCodes.push(htmlVirtualCode);
+
+//   const tsx = civet2tsx(
+//     safeInput,
+//     // this.snapshot.getText(0, this.snapshot.getLength()),
+//     this.fileName,
+//     htmlDocument,
+//     virtualUpdate
+//   );
+
+//   this.civetMeta = { ...civetMetadata, tsxRanges: tsx.ranges };
+//   //@ts-ignore
+//   this.compilerDiagnostics.push(...tsx.diagnostics);
+//   this.embeddedCodes.push(tsx.virtualCode);
+//   // const civetMetadata = getCivetMetadata(
+//   //   this.fileName,
+//   //   this.snapshot.getText(0, this.snapshot.getLength()),
+//   //   // opts.safeInput
+//   // );
+
+//   // if (civetMetadata.diagnostics.length > 0) {
+//   //   this.compilerDiagnostics.push(...civetMetadata.diagnostics);
+//   // }
+
+//   // const { htmlDocument, virtualCode: htmlVirtualCode } = parseHTML(
+//   //   this.snapshot,
+//   //   0
+//   // );
+//   // this.htmlDocument = htmlDocument;
+
+//   // // const scriptTags = extractScriptTags(
+//   // //   this.snapshot,
+//   // //   htmlDocument,
+//   // //   civetMetadata.ast,
+//   // // );
+
+//   // // this.scriptCodeIds = scriptTags.map((scriptTag) => scriptTag.id);
+
+//   // htmlVirtualCode.embeddedCodes = [];
+//   // htmlVirtualCode.embeddedCodes.push(
+//   //   ...extractStylesheets(this.snapshot, htmlDocument, civetMetadata.ast),
+//   //   ...scriptTags,
+//   // );
+
+//   // this.embeddedCodes = [];
+//   // this.embeddedCodes.push(htmlVirtualCode);
+
+//   // const tsx = civet2tsx(
+//   //   opts.safeInput,
+//   //   // this.snapshot.getText(0, this.snapshot.getLength()),
+//   //   // this.snapshot.getText(0, this.snapshot.getLength()),
+//   //   this.fileName,
+//   //   htmlDocument,
+//   //   opts
+//   //   // this.snapshot.getText(0, this.snapshot.getLength()),
+//   //   // change
+//   // );
+
+
+//   // console.log("🚗 -----------------------------------------------------🚗")
+//   // console.log("🚗 ~ file: index.ts:324 ~ CivetVirtualCode ~ tsx:", tsx)
+//   // console.log("🚗 -----------------------------------------------------🚗")
+
+
+//   // this.civetMeta = { ...civetMetadata, tsxRanges: tsx.ranges };
+//   // //@ts-ignore
+//   // this.compilerDiagnostics.push(...tsx.diagnostics);
+//   // this.embeddedCodes.push(tsx.virtualCode);
+
+
+// }

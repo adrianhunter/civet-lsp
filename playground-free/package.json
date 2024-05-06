@@ -1,0 +1,12 @@
+{
+  "name": "playground-free",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {},
+  "dependencies": {
+    "@civetjs/compiler": "file:../packages/language-tools/packages/compiler",
+    "@civetjs/ts-plugin": "file:../packages/language-tools/packages/ts-plugin-civet",
+    "@danielx/civet": "^0.7.6",
+    "typescript": "5.2.2"
+  }
+}

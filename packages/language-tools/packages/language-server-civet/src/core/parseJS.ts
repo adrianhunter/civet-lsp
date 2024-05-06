@@ -1,5 +1,5 @@
-import type { ParentNode, ParseResult } from "@astrojs/compiler/types";
-import { is } from "@astrojs/compiler/utils";
+import type { ParentNode, ParseResult } from "@civetjs/compiler/types";
+import { is } from "@civetjs/compiler";
 import {
   buildMappings,
   type CodeInformation,
@@ -53,7 +53,7 @@ function getScriptType(
 
 /**
  * Get all the isolated scripts in the HTML document
- * Isolated scripts are scripts that are hoisted by Astro and as such, are isolated from the rest of the code because of the implicit `type="module"`
+ * Isolated scripts are scripts that are hoisted by Civet and as such, are isolated from the rest of the code because of the implicit `type="module"`
  * All the isolated scripts are passed to the TypeScript language server as separate `.mts` files.
  */
 function findModuleScripts(
@@ -122,7 +122,7 @@ interface JavaScriptContext {
 
 /**
  * Get all the inline scripts in the HTML document
- * Inline scripts are scripts that are not hoisted by Astro and as such, are not isolated from the rest of the code.
+ * Inline scripts are scripts that are not hoisted by Civet and as such, are not isolated from the rest of the code.
  * All the inline scripts are concatenated into a single `.mjs` file and passed to the TypeScript language server.
  */
 function findClassicScripts(
@@ -182,7 +182,7 @@ function isJSON(type: string | null | undefined): boolean {
 function findEventAttributes(ast: ParseResult["ast"]): JavaScriptContext[] {
   const eventAttrs: JavaScriptContext[] = [];
 
-  // `@astrojs/compiler`'s `walk` method is async, so we can't use it here. Arf
+  // `@civerjs/compiler`'s `walk` method is async, so we can't use it here. Arf
   function walkDown(parent: ParentNode) {
     if (!parent.children) return;
 

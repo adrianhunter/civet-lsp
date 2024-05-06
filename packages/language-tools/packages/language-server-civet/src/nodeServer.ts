@@ -29,6 +29,12 @@ connection.onInitialize((params) => {
 	);
 });
 
+connection.onExecuteCommand(param => {
+
+	// server.projects.getProject()
+
+})
+
 connection.onInitialized(() => {
 	server.initialized();
 });

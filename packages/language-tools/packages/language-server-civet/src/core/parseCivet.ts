@@ -1,4 +1,4 @@
-import { parse } from "@astrojs/compiler/sync";
+import { parse } from "@civetjs/compiler";
 import type { ParseOptions, ParseResult, Point } from "@civetjs/compiler/types";
 import type { LSPTSXRanges } from "./civet2tsx.js";
 
@@ -39,6 +39,7 @@ function safeParseAst(
         type: "root",
         children: [],
       },
+      civetMap: {} as any,
       diagnostics: [
         {
           code: 1000,

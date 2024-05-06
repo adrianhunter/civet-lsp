@@ -1,0 +1,9 @@
+{
+
+    "editor.formatOnSave": false,
+    "files.associations": {
+        // "*.civet": "astro",
+
+    },
+    "typescript.tsdk": "node_modules/typescript/lib"
+}

@@ -91,7 +91,21 @@ export function createServerOptions(
             ts,
           ),
         );
+      } else {
+        console.warn("not ts context...");
       }
+
+      // if (projectContext.typescript) {
+      console.log(
+        "🚗 ----------------------------------------------------------------------------------------------🚗",
+      );
+      console.log(
+        "🚗 ~ file: languageServerPlugin.ts:111 ~ getLanguagePlugins ~ languagePlugins:",
+        languagePlugins,
+      );
+      console.log(
+        "🚗 ----------------------------------------------------------------------------------------------🚗",
+      );
 
       return languagePlugins;
     },
@@ -175,14 +189,13 @@ export function createServerOptions(
               return [];
             }
 
-            return [];
-            // const hasPluginLoadedAlready =
-            //   (await prettier.getSupportInfo()).languages.some((l: any) =>
-            //     l.name === "civet"
-            //   ) ||
-            //   resolvedConfig.plugins?.includes("prettier-plugin-civet"); // getSupportInfo doesn't seems to work very well in Prettier 3 for plugins
+            const hasPluginLoadedAlready =
+              (await prettier.getSupportInfo()).languages.some((l: any) =>
+                l.name === "civet"
+              ) ||
+              resolvedConfig.plugins?.includes("prettier-plugin-civet"); // getSupportInfo doesn't seems to work very well in Prettier 3 for plugins
 
-            // return hasPluginLoadedAlready ? [] : [prettierPluginPath];
+            return hasPluginLoadedAlready ? [] : [prettierPluginPath];
           }
         },
       },

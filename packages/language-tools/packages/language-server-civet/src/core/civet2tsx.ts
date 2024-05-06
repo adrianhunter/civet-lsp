@@ -1,5 +1,4 @@
-// import { convertToTSX } from "@astrojs/compiler/sync";
-import { convertToTSX } from "@civetjs/compiler";
+import { VirtualUpdate, convertToTSX } from "@civetjs/compiler";
 
 import type { ConvertToTSXOptions, TSXResult } from "@civetjs/compiler/types";
 import { decode } from "@jridgewell/sourcemap-codec";
@@ -11,6 +10,7 @@ import type {
 import { Range } from "@volar/language-server";
 import { HTMLDocument, TextDocument } from "vscode-html-languageservice";
 import { patchTSX } from "./utils.js";
+import type ts from "typescript";
 
 export interface LSPTSXRanges {
   frontmatter: Range;
@@ -20,9 +20,10 @@ export interface LSPTSXRanges {
 export function safeConvertToTSX(
   content: string,
   options: ConvertToTSXOptions,
+  change?: ts.TextChangeRange | undefined
 ) {
   try {
-    const tsx = convertToTSX(content, { filename: options.filename });
+    const tsx = convertToTSX(content, { filename: options.filename, }, change);
     return tsx;
   } catch (e) {
     console.error(
@@ -86,28 +87,49 @@ export function civet2tsx(
   input: string,
   fileName: string,
   htmlDocument: HTMLDocument,
+  opts?: ts.TextChangeRange | undefined
+  // realInput?: string
+
 ) {
-  const tsx = safeConvertToTSX(input, { filename: fileName });
+  const tsx = safeConvertToTSX(input, { filename: fileName, }, opts);
 
   return {
     //@ts-ignore
-    virtualCode: getVirtualCodeTSX(input, tsx, fileName, htmlDocument),
+    virtualCode: getVirtualCodeTSX(input, tsx, fileName, htmlDocument, opts),
     diagnostics: tsx.diagnostics,
     //@ts-ignore
     ranges: getTSXRangesAsLSPRanges(tsx),
   };
 }
-
 function getVirtualCodeTSX(
   input: string,
   tsx: TSXResult,
   fileName: string,
   htmlDocument: HTMLDocument,
+  opts?: VirtualUpdate
+
+
 ): VirtualCode {
   tsx.code = patchTSX(tsx.code, fileName);
   const v3Mappings = decode(tsx.map.mappings);
   const sourcedDoc = TextDocument.create("", "civet", 0, input);
-  const genDoc = TextDocument.create("", "typescriptreact", 0, tsx.code);
+
+  let tsxCode = tsx.code
+
+
+  // if (tsx.mapRaw && opts?.char === ".") {
+  //   tsxCode = tsxCode.replace("= cool", "= cool.")
+
+  //   const dog = new SourceMap(tsx.mapRaw)
+
+  //   const wow = dog.getGeneratedOffset(opts.start)
+
+
+  // }
+
+
+
+  const genDoc = TextDocument.create("", "typescriptreact", 0, tsxCode);
   const mappings: CodeMapping[] = [];
 
   let current:
@@ -151,9 +173,9 @@ function getVirtualCodeTSX(
           if (
             lastMapping &&
             lastMapping.generatedOffsets[0] + lastMapping.lengths[0] ===
-              current.genOffset &&
+            current.genOffset &&
             lastMapping.sourceOffsets[0] + lastMapping.lengths[0] ===
-              current.sourceOffset
+            current.sourceOffset
           ) {
             lastMapping.lengths[0] += length;
           } else {
@@ -199,6 +221,10 @@ function getVirtualCodeTSX(
         };
       }
     }
+  }
+
+  if (opts?.char === ".") {
+    // sourcedDoc.
   }
 
   return {

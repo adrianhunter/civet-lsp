@@ -1,5 +1,5 @@
-import type { ParentNode, ParseResult } from "@astrojs/compiler/types";
-import { is } from "@astrojs/compiler/utils";
+import type { ParentNode, ParseResult } from "@civetjs/compiler/types";
+import { is } from "@civetjs/compiler";
 import {
   buildMappings,
   type CodeInformation,

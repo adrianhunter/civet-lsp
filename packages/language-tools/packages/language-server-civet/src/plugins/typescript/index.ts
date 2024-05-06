@@ -20,10 +20,22 @@ export const create = (ts: typeof import("typescript")): ServicePlugin[] => {
     {},
   );
   return tsServicePlugins.map<ServicePlugin>((plugin) => {
+    console.log("🚗 -------------------------------------------------🚗");
+    console.log("🚗 ~ file: index.ts:126 ~ create ~ plugin:", plugin);
+    console.log("🚗 -------------------------------------------------🚗");
+
     if (plugin.name === "typescript-semantic") {
       return {
         ...plugin,
         create(context): ServicePluginInstance {
+          console.log(
+            "🚗 --------------------------------------------------🚗",
+          );
+          console.log("🚗 ~ file: index.ts:28 ~ create ~ context:", context);
+          console.log(
+            "🚗 --------------------------------------------------🚗",
+          );
+
           const typeScriptPlugin = plugin.create(context);
           return {
             ...typeScriptPlugin,

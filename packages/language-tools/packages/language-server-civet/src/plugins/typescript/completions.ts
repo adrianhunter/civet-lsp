@@ -22,7 +22,7 @@ export function enhancedProvideCompletionItems(
 
         // For components import, use the file kind and sort them first, as they're often what the user want over something else
         if (
-          [".civet", ".svelte", ".vue", ".civet"].some((ext) =>
+          [".civet", ".svelte", ".vue"].some((ext) =>
             source.endsWith(ext)
           )
         ) {

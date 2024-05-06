@@ -7,4 +7,6 @@ test
 .vscode-test
 
 syntaxes/astro.tmLanguage.src.yaml
+syntaxes/civet.tmLanguage.src.yaml
+
 node_modules/prettier/esm

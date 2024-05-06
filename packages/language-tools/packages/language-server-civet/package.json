@@ -1,6 +1,6 @@
 {
   "name": "@civetjs/language-server",
-  "version": "2.8.4",
+  "version": "0.0.1",
   "author": "withcivet",
   "license": "MIT",
   "repository": {
@@ -26,7 +26,6 @@
     "test:match": "pnpm run test -g"
   },
   "dependencies": {
-    "@astrojs/compiler": "^2.7.0",
     "@astrojs/svelte": "^5.0.3",
     "@astrojs/vue": "^4.0.8",
     "@civetjs/compiler": "0.0.1",
@@ -52,7 +51,6 @@
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.17.8",
     "@volar/test-utils": "~2.1.5",
-    "astro": "^4.3.5",
     "chai": "^4.3.7",
     "mocha": "^10.2.0",
     "svelte": "^4.2.10",

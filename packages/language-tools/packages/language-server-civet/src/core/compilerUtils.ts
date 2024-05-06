@@ -1,8 +1,8 @@
-import type { AttributeNode, Point } from "@astrojs/compiler";
+import type { AttributeNode, Point } from "@civetjs/compiler";
 import { Position as LSPPosition } from "@volar/language-server";
 
 /**
- * Transform a Point from the Astro compiler to an LSP Position
+ * Transform a Point from the Civet compiler to an LSP Position
  */
 export function PointToPosition(point: Point) {
   // Columns and lines are 0-based in LSP, but the compiler's Point are 1 based.

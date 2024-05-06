@@ -1,5 +1,5 @@
 {
-  "name": "@astrojs/ts-plugin",
+  "name": "@astrojs/ts-pluginx",
   "version": "1.6.1",
   "description": "A TypeScript Plugin providing Astro intellisense",
   "main": "dist/index.js",
@@ -9,8 +9,16 @@
     "url": "https://github.com/withastro/language-tools",
     "directory": "packages/ts-plugin"
   },
-  "keywords": ["astro", "typescript", "javascript", "plugin"],
-  "files": ["dist/**/*.js", "dist/**/*.d.ts"],
+  "keywords": [
+    "astro",
+    "typescript",
+    "javascript",
+    "plugin"
+  ],
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
@@ -19,10 +27,10 @@
   "author": "withastro",
   "license": "MIT",
   "dependencies": {
-    "@volar/language-core": "~2.1.5",
-    "@volar/typescript": "~2.1.5",
     "@astrojs/compiler": "^2.7.0",
     "@jridgewell/sourcemap-codec": "^1.4.15",
+    "@volar/language-core": "~2.1.5",
+    "@volar/typescript": "~2.1.5",
     "semver": "^7.3.8",
     "vscode-languageserver-textdocument": "^1.0.11"
   },
